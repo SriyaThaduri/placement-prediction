@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction Result</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px 50px 50px 50px;
+            border-radius: 8px;
+            max-width: 800px;
+            margin: auto;
+            box-shadow: 0px 0px 10px 0px #0000001a;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        p {
+            font-size: 16px;
+            color: #555;
+        }
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .error {
+            color: #f44336;
+            font-weight: bold;
+        }
+        ul {
+            list-style-type: square;
+            margin-left: 20px;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        a:hover {
+            background-color: #0b7dda;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prediction Result for {{ user_name }}</h1>
+        <p><strong>Roll Number:</strong> {{ roll_number }}</p>
+        {% if placement %}
+            <p class="success"><strong>Prediction:</strong> You will likely be placed!</p>
+            <p><strong>Estimated Package:</strong> ₹{{ "{:,.2f}".format(estimated_package) }}</p>
+        {% else %}
+            <p class="error"><strong>Prediction:</strong> You are less likely to be placed.</p>
+        {% endif %}
+        
+        <!-- Recommended Domain Section -->
+        <h2>Recommended Domain</h2>
+        <p><strong>{{ recommended_domain | upper }}</strong></p>
+
+        <h2>Skill Recommendations</h2>
+        
+        <!-- Technical Skills Recommendations -->
+        <h3>Missing Critical Technical Skills:</h3>
+        {% if missing_skills %}
+            <ul>
+                {% for skill in missing_skills %}
+                    <li>{{ skill }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No missing critical technical skills.</p>
+        {% endif %}
+
+        <h3>Technical Skills That Need Improvement:</h3>
+        {% if low_scoring_skills %}
+            <ul>
+                {% for skill in low_scoring_skills %}
+                    <li>{{ skill }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No technical skills need improvement.</p>
+        {% endif %}
+
+        <!-- Soft Skills Recommendations -->
+        <h3>Missing Soft Skills:</h3>
+        {% if missing_soft_skills %}
+            <ul>
+                {% for skill in missing_soft_skills %}
+                    <li>{{ skill }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No missing soft skills.</p>
+        {% endif %}
+
+        <!-- Projects Section -->
+        <h2>Projects</h2>
+        {% if projects %}
+            <ul>
+                {% for project in projects %}
+                    <li>
+                        <strong>{{ project.title }}</strong>
+                        <p><strong>Skills Used:</strong> {{ project.skills | join(', ') }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No projects to display.</p>
+        {% endif %}
+
+        <a href="{{ url_for('index') }}">Back to Form</a>
+    </div>
+</body>
+</html>
